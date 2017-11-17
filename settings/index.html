@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+
+<head>
+	<script src="https://unpkg.com/vue"></script>
+	<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+	<script src="js/vue.js"></script>
+</head>
+
+<body>
+
+	<div id="content">
+		<h1 data-i18n="settings.title"></h1>
+
+		<fieldset>
+			<legend data-i18n="settings.subtitle"></legend>
+
+			<div class="field row" v-for="card in cards">
+				<label :for="card.uid"><b>({{ card.blips }})</b> {{ card.uid }}</label>
+				<input :id="card.uid" type="text" v-model="card.value" @input="updateValue(card)" />
+				<button @click="play(card)">Test</button>
+				<button @click="remove(card)">Delete</button>
+			</div>
+
+		</fieldset>
+
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+{
+  "id": "se.warting.nfctools",
+  "permissions": [
+    "homey:wireless:nfc"
+  ],
+  "sdk": 2,
+  "name": {
+    "en": "NFC tools"
+  },
+  "description": {
+    "en": "NFC tools"
+  },
+  "category": "tools",
+  "version": "0.0.1",
+  "compatibility": ">=1.5.0",
+  "author": {
+    "name": "Stefan Wärting",
+    "email": "stefan@warting.se"
+  },
+  "contributors": [{
+    "name": "Jimmy Wärting",
+    "email": "jimmy@warting.se"
+  }],
+  "flow": {
+    "triggers": [{
+      "id": "nfc_touched",
+      "title": {
+        "en": "NFC touched"
+      },
+      "tokens": [{
+        "name": "url",
+        "type": "string",
+        "title": {
+          "en": "url"
+        },
+        "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
+      }]
+    }]
+  }
+}
