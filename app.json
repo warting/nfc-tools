@@ -32,13 +32,22 @@
         "en": "NFC touched"
       },
       "tokens": [{
-        "name": "url",
-        "type": "string",
-        "title": {
-          "en": "url"
+          "name": "data",
+          "type": "string",
+          "title": {
+            "en": "Data"
+          },
+          "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
         },
-        "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
-      }]
+        {
+          "name": "title",
+          "type": "string",
+          "title": {
+            "en": "Title"
+          },
+          "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
+        }
+      ]
     }]
   }
 }
