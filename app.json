@@ -27,6 +27,13 @@
       "email": "jimmy@warting.se"
     }]
   },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "stefan@warting.se"
+      }
+    }
+  },
   "flow": {
     "triggers": [{
       "id": "nfc_touched",

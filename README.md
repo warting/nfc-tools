@@ -1,3 +1,3 @@
 # NFC Tools
 
-NFC tools
+This app gives extra powers to NFC
