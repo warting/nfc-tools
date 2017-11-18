@@ -6,6 +6,8 @@ class MyApp extends Homey.App {
 
   onInit() {
 
+    this.log("My app is running");
+
     Homey.ManagerNFC.on('tag', (data) => {
       const cards = Homey.ManagerSettings.get("cards") || [];
       const uid = data.uid;
@@ -19,11 +21,13 @@ class MyApp extends Homey.App {
       if (card) {
         this.play(card);
         card.blips++;
+        card.lastUsed = Date.now();
         cards.sort((a, b) => b.blips - a.blips);
       } else {
         cards.push({
           uid,
           value: "",
+          title: "",
           blips: 0,
           lastUsed: 0
         });
@@ -41,7 +45,8 @@ class MyApp extends Homey.App {
     let nfcStarter = new Homey.FlowCardTrigger('nfc_touched');
 
     let tokens = {
-      'url': card.value
+      'data': card.value,
+      'title': card.title
     }
 
     nfcStarter

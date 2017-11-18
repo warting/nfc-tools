@@ -17,7 +17,8 @@
 
 			<div class="field row" v-for="card in cards">
 				<label :for="card.uid"><b>({{ card.blips }})</b> {{ card.uid }}</label>
-				<input :id="card.uid" type="text" v-model="card.value" @input="updateValue(card)" />
+				<input type="text" v-model="card.value" @input="updateValue(card)" />
+				<input type="text" v-model="card.title" @input="updateValue(card)" />
 				<button @click="play(card)">Test</button>
 				<button @click="remove(card)">Delete</button>
 			</div>

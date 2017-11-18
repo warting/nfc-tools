@@ -10,17 +10,38 @@
   "description": {
     "en": "NFC tools"
   },
+  "images": {
+    "large": "/assets/images/large.png",
+    "small": "/assets/images/small.png"
+  },
   "category": "tools",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "compatibility": ">=1.5.0",
   "author": {
     "name": "Stefan Wärting",
     "email": "stefan@warting.se"
   },
-  "contributors": [{
-    "name": "Jimmy Wärting",
-    "email": "jimmy@warting.se"
-  }],
+  "contributors": {
+    "developers": [{
+        "name": "Stefan Wärting",
+        "email": "stefan@warting.se"
+      },
+      {
+        "name": "Jimmy Wärting",
+        "email": "jimmy@warting.se"
+      }
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "stefan@warting.se"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/warting/nfc-tools/issues"
+  },
   "flow": {
     "triggers": [{
       "id": "nfc_touched",
@@ -28,13 +49,22 @@
         "en": "NFC touched"
       },
       "tokens": [{
-        "name": "url",
-        "type": "string",
-        "title": {
-          "en": "url"
+          "name": "data",
+          "type": "string",
+          "title": {
+            "en": "Data"
+          },
+          "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
         },
-        "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
-      }]
+        {
+          "name": "title",
+          "type": "string",
+          "title": {
+            "en": "Title"
+          },
+          "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
+        }
+      ]
     }]
   }
 }
