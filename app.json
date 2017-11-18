@@ -34,6 +34,9 @@
       }
     }
   },
+  "bugs": {
+    "url": "https://github.com/warting/nfc-tools/issues"
+  },
   "flow": {
     "triggers": [{
       "id": "nfc_touched",
