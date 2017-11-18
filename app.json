@@ -23,9 +23,14 @@
   },
   "contributors": {
     "developers": [{
-      "name": "Jimmy Wärting",
-      "email": "jimmy@warting.se"
-    }]
+        "name": "Stefan Wärting",
+        "email": "stefan@warting.se"
+      },
+      {
+        "name": "Jimmy Wärting",
+        "email": "jimmy@warting.se"
+      }
+    ]
   },
   "contributing": {
     "donate": {
