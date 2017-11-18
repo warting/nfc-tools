@@ -21,10 +21,12 @@
     "name": "Stefan Wärting",
     "email": "stefan@warting.se"
   },
-  "contributors": [{
-    "name": "Jimmy Wärting",
-    "email": "jimmy@warting.se"
-  }],
+  "contributors": {
+    "developers": [{
+      "name": "Jimmy Wärting",
+      "email": "jimmy@warting.se"
+    }]
+  },
   "flow": {
     "triggers": [{
       "id": "nfc_touched",
