@@ -46,7 +46,9 @@ class MyApp extends Homey.App {
 
     let tokens = {
       'data': card.value,
-      'title': card.title
+      'title': card.title,
+      'count': card.blips,
+      'id': card.uid,
     }
 
     nfcStarter
