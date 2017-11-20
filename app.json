@@ -62,7 +62,23 @@
           "title": {
             "en": "Title"
           },
-          "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
+          "example": "Movie title"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "title": {
+            "en": "Id"
+          },
+          "example": "aa:bb:cc:dd"
+        },
+        {
+          "name": "count",
+          "type": "number",
+          "title": {
+            "en": "Count"
+          },
+          "example": "123"
         }
       ]
     }]
