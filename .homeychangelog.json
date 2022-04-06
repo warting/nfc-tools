@@ -1,0 +1,8 @@
+{
+  "1.0.1": {
+    "en": "Fix error saying Vue is not a constructor"
+  },
+  "1.0.0": {
+    "en": "Initial release"
+  }
+}

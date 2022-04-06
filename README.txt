@@ -8,5 +8,8 @@ With this app you can register NFC cards in settings and add additional values t
 
 ## Changelog:
 
+V1.0.1
+* Bundle Vue 3.2.31
+
 V1.0.0
 * Initial Release
