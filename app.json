@@ -16,7 +16,7 @@
     "small": "/assets/images/small.png"
   },
   "category": "tools",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "compatibility": ">=1.5.0",
   "author": {
     "name": "Stefan Wärting",
