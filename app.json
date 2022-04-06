@@ -4,6 +4,7 @@
     "homey:wireless:nfc"
   ],
   "sdk": 2,
+  "brandColor": "#FF0000",
   "name": {
     "en": "NFC tools"
   },
@@ -15,14 +16,15 @@
     "small": "/assets/images/small.png"
   },
   "category": "tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=1.5.0",
   "author": {
     "name": "Stefan Wärting",
     "email": "stefan@warting.se"
   },
   "contributors": {
-    "developers": [{
+    "developers": [
+      {
         "name": "Stefan Wärting",
         "email": "stefan@warting.se"
       },
@@ -43,44 +45,47 @@
     "url": "https://github.com/warting/nfc-tools/issues"
   },
   "flow": {
-    "triggers": [{
-      "id": "nfc_touched",
-      "title": {
-        "en": "NFC touched"
-      },
-      "tokens": [{
-          "name": "data",
-          "type": "string",
-          "title": {
-            "en": "Data"
-          },
-          "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
+    "triggers": [
+      {
+        "id": "nfc_touched",
+        "title": {
+          "en": "NFC touched"
         },
-        {
-          "name": "title",
-          "type": "string",
-          "title": {
-            "en": "Title"
+        "tokens": [
+          {
+            "name": "data",
+            "type": "string",
+            "title": {
+              "en": "Data"
+            },
+            "example": "https://www.youtube.com/watch?v=vFFDArGuLBg"
           },
-          "example": "Movie title"
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "title": {
-            "en": "Id"
+          {
+            "name": "title",
+            "type": "string",
+            "title": {
+              "en": "Title"
+            },
+            "example": "Movie title"
           },
-          "example": "aa:bb:cc:dd"
-        },
-        {
-          "name": "count",
-          "type": "number",
-          "title": {
-            "en": "Count"
+          {
+            "name": "id",
+            "type": "string",
+            "title": {
+              "en": "Id"
+            },
+            "example": "aa:bb:cc:dd"
           },
-          "example": "123"
-        }
-      ]
-    }]
+          {
+            "name": "count",
+            "type": "number",
+            "title": {
+              "en": "Count"
+            },
+            "example": "123"
+          }
+        ]
+      }
+    ]
   }
 }
