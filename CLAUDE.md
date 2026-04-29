@@ -49,3 +49,4 @@ Three small pieces glued together by Homey's managers:
 
 - Issues/PRs are tracked at https://github.com/warting/nfc-tools. Commits in history follow short imperative messages, often `Fixes #N ...`.
 - `README.md` and `README.txt` are kept identical (Homey App Store reads `README.txt`).
+- `web-scanner/` and `android-scanner/` hold companion phone scanners that send tag UIDs to the Homey app's cloud webhook. They are independent codebases — see their own READMEs. Don't pull dependencies between them and the Homey app; the only contract is the webhook URL shape.
