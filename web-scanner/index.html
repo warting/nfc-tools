@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#FF0000" />
+  <title>NFC tools — phone scanner</title>
+  <style>
+    :root {
+      --bg: #111;
+      --fg: #f5f5f5;
+      --muted: #888;
+      --accent: #FF0000;
+      --ok: #2ecc71;
+      --err: #e74c3c;
+      --card: #1c1c1c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg); color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+    }
+    main {
+      max-width: 480px; margin: 0 auto;
+      padding: 24px 20px env(safe-area-inset-bottom, 24px);
+    }
+    h1 { font-size: 22px; margin: 8px 0 4px; }
+    p.lede { color: var(--muted); margin: 0 0 20px; font-size: 14px; line-height: 1.5; }
+    label { display: block; font-size: 12px; color: var(--muted); margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+    input[type=text], input[type=url] {
+      width: 100%; padding: 12px 14px;
+      background: var(--card); color: var(--fg);
+      border: 1px solid #333; border-radius: 10px;
+      font-size: 15px; font-family: inherit;
+    }
+    input:focus { outline: none; border-color: var(--accent); }
+    button#scan {
+      display: block; width: 100%;
+      margin-top: 24px; padding: 18px;
+      background: var(--accent); color: white;
+      border: none; border-radius: 14px;
+      font-size: 18px; font-weight: 600;
+      cursor: pointer;
+    }
+    button#scan:disabled { background: #444; color: var(--muted); cursor: not-allowed; }
+    button#scan:active { transform: scale(0.98); }
+    .status {
+      margin-top: 20px; padding: 14px 16px;
+      background: var(--card); border-radius: 10px;
+      font-size: 14px; line-height: 1.5;
+      min-height: 48px;
+      white-space: pre-wrap;
+    }
+    .status .uid { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; color: var(--accent); word-break: break-all; }
+    .status.ok { border-left: 3px solid var(--ok); }
+    .status.err { border-left: 3px solid var(--err); color: #ffcccc; }
+    .unsupported { background: #2a1414; border: 1px solid #5a2222; padding: 16px; border-radius: 10px; margin-top: 20px; }
+    .unsupported a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>NFC tools — phone scanner</h1>
+    <p class="lede">
+      Reads a tag's UID with Web NFC and forwards it to your Homey app's webhook.
+      Chrome on Android only. iOS is not supported (Apple does not implement Web NFC).
+    </p>
+
+    <div id="unsupported" class="unsupported" hidden>
+      Your browser does not support Web NFC. Use Chrome on Android, or build the
+      <a href="../android-scanner/">companion Android app</a>.
+    </div>
+
+    <label for="url">Webhook URL</label>
+    <input id="url" type="url" placeholder="https://webhooks.athom.com/webhook/&lt;id&gt;?homey=&lt;homeyId&gt;" inputmode="url" autocomplete="off" />
+
+    <label for="title">Optional title (added as <code>?title=</code>)</label>
+    <input id="title" type="text" placeholder="e.g. Bedroom" autocomplete="off" />
+
+    <button id="scan" type="button">Scan NFC tag</button>
+
+    <div id="status" class="status">Idle. Configure the webhook URL and tap Scan.</div>
+  </main>
+
+  <script>
+    const $url = document.getElementById('url');
+    const $title = document.getElementById('title');
+    const $scan = document.getElementById('scan');
+    const $status = document.getElementById('status');
+    const $unsupported = document.getElementById('unsupported');
+
+    $url.value = localStorage.getItem('webhookUrl') || '';
+    $title.value = localStorage.getItem('title') || '';
+    $url.addEventListener('change', () => localStorage.setItem('webhookUrl', $url.value.trim()));
+    $title.addEventListener('change', () => localStorage.setItem('title', $title.value.trim()));
+
+    if (!('NDEFReader' in window)) {
+      $unsupported.hidden = false;
+      $scan.disabled = true;
+    }
+
+    function setStatus(parts, kind) {
+      $status.className = 'status' + (kind ? ' ' + kind : '');
+      $status.replaceChildren();
+      const items = Array.isArray(parts) ? parts : [parts];
+      for (const item of items) {
+        if (typeof item === 'string') {
+          $status.appendChild(document.createTextNode(item));
+        } else if (item && item.uid) {
+          const span = document.createElement('span');
+          span.className = 'uid';
+          span.textContent = item.uid;
+          $status.appendChild(span);
+        }
+      }
+    }
+
+    function uidFromEvent(event) {
+      // NDEFReadingEvent.serialNumber on Chrome Android is a colon-separated hex string.
+      // Be defensive: some versions return the raw bytes / no colons. Normalize to colon-hex lowercase.
+      const raw = event.serialNumber || '';
+      if (!raw) return '';
+      const hex = raw.toLowerCase().replace(/[^0-9a-f]/g, '');
+      const pairs = hex.match(/.{2}/g);
+      return pairs ? pairs.join(':') : raw.toLowerCase();
+    }
+
+    async function postUid(url, uid, title) {
+      const u = new URL(url);
+      u.searchParams.set('uid', uid);
+      if (title) u.searchParams.set('title', title);
+      const resp = await fetch(u.toString(), { method: 'GET', cache: 'no-store' });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return resp;
+    }
+
+    let scanning = false;
+    $scan.addEventListener('click', async () => {
+      if (scanning) return;
+      const url = $url.value.trim();
+      if (!url) { setStatus('Set a webhook URL first.', 'err'); return; }
+      try { new URL(url); } catch { setStatus('Webhook URL is not valid.', 'err'); return; }
+
+      const reader = new NDEFReader();
+      try {
+        scanning = true;
+        $scan.disabled = true;
+        setStatus('Hold a tag against the back of your phone…');
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 30000);
+        await reader.scan({ signal: ctrl.signal });
+
+        reader.onreadingerror = () => setStatus('Could not read the tag — try again.', 'err');
+        reader.onreading = async (event) => {
+          ctrl.abort();
+          clearTimeout(timeout);
+          const uid = uidFromEvent(event);
+          if (!uid) { setStatus('Tag scanned but UID was empty.', 'err'); finish(); return; }
+          setStatus(['Sending ', { uid }, '…']);
+          try {
+            await postUid(url, uid, $title.value.trim());
+            setStatus(['Sent ', { uid }, ' to your Homey.'], 'ok');
+          } catch (err) {
+            setStatus(['Send failed: ' + err.message + '. UID was ', { uid }, '.'], 'err');
+          }
+          finish();
+        };
+      } catch (err) {
+        if (err.name === 'AbortError') setStatus('Scan timed out. Tap Scan to try again.', 'err');
+        else setStatus('Scan error: ' + err.message, 'err');
+        finish();
+      }
+    });
+
+    function finish() {
+      scanning = false;
+      $scan.disabled = !('NDEFReader' in window);
+    }
+  </script>
+</body>
+</html>
