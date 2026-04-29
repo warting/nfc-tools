@@ -13,6 +13,33 @@
 	<div id="content">
 		<h1 data-i18n="settings.title"></h1>
 
+		<fieldset v-if="webhookConfigured">
+			<legend>Phone scanning</legend>
+			<p>
+				Write this URL to an NFC tag (e.g. with the <em>NFC Tools</em> Android app) or
+				call it from an iOS Shortcut. Anyone with this URL can fire your flow — treat it like a password.
+			</p>
+			<p>
+				Pass <code>?title=...</code> and/or <code>?value=...</code> on the URL to identify the tag.
+				A first scan with new metadata creates a new entry below; later scans increment its counter and fire the flow.
+			</p>
+			<p>
+				<input type="text" readonly :value="webhookUrl" ref="webhookUrlInput" style="width: 100%; font-family: monospace;" />
+			</p>
+			<p>
+				<button @click="copyWebhookUrl">Copy URL</button>
+			</p>
+		</fieldset>
+
+		<fieldset v-else>
+			<legend>Phone scanning</legend>
+			<p>
+				Phone-based scanning is not configured for this build. The app developer must register a
+				webhook at <code>tools.developer.homey.app/webhooks</code> and set <code>WEBHOOK_ID</code> /
+				<code>WEBHOOK_SECRET</code> in <code>env.json</code> before publishing.
+			</p>
+		</fieldset>
+
 		<fieldset>
 			<legend data-i18n="settings.subtitle"></legend>
 
