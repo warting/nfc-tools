@@ -1,6 +1,6 @@
 {
   "2.0.0": {
-    "en": "Migrated to Homey Apps SDK v3 with support for Homey Pro (Early 2023). Existing flows and saved cards continue to work."
+    "en": "Updated to Homey Apps SDK v3, the new runtime required by Homey Pro (Early 2023). NFC tag scanning continues to work on Homey hardware that has an NFC antenna (e.g. Homey Pro 2019). Phone-based scanning support is planned for a future release."
   },
   "1.0.2": {
     "en": "Fix error saying Vue is not a constructor"
