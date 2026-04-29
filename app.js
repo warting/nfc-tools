@@ -2,62 +2,56 @@
 
 const Homey = require('homey');
 
-class MyApp extends Homey.App {
+class NfcToolsApp extends Homey.App {
 
-  onInit() {
+  async onInit() {
+    this.log('NFC tools app is running');
 
-    this.log("My app is running");
+    this.nfcTouched = this.homey.flow.getTriggerCard('nfc_touched');
 
-    Homey.ManagerNFC.on('tag', (data) => {
-      const cards = Homey.ManagerSettings.get("cards") || [];
-      const uid = data.uid;
-      const card = cards.find(card => card.uid === uid);
+    this.homey.nfc.on('tag', async (tag) => {
+      const uid = String(tag.uid);
 
-      if (uid.startsWith('08')) {
-        // Do nothing (https://stackoverflow.com/a/9800750)
-        return
-      }
+      // Random per-scan UIDs (https://stackoverflow.com/a/9800750)
+      if (uid.startsWith('08')) return;
+
+      const cards = this.homey.settings.get('cards') || [];
+      const card = cards.find(c => c.uid === uid);
 
       if (card) {
-        this.play(card);
+        try {
+          await this.play(card);
+        } catch (err) {
+          this.error(err);
+        }
         card.blips++;
         card.lastUsed = Date.now();
         cards.sort((a, b) => b.blips - a.blips);
       } else {
         cards.push({
           uid,
-          value: "",
-          title: "",
+          value: '',
+          title: '',
           blips: 0,
-          lastUsed: 0
+          lastUsed: 0,
         });
       }
 
-      Homey.ManagerSettings.set("cards", cards);
-      Homey.ManagerApi.realtime('cards', cards);
-
+      this.homey.settings.set('cards', cards);
+      this.homey.api.realtime('cards', cards).catch(this.error);
     });
   }
 
-  play(card) {
-    this.log(card)
-
-    let nfcStarter = new Homey.FlowCardTrigger('nfc_touched');
-
-    let tokens = {
-      'data': card.value,
-      'title': card.title,
-      'count': card.blips,
-      'id': card.uid,
-    }
-
-    nfcStarter
-      .register()
-      .trigger(tokens)
-      .catch(this.error)
-      .then(this.log)
-
+  async play(card) {
+    this.log('play', card);
+    return this.nfcTouched.trigger({
+      data: card.value,
+      title: card.title,
+      count: card.blips,
+      id: card.uid,
+    });
   }
+
 }
 
-module.exports = MyApp;
+module.exports = NfcToolsApp;
