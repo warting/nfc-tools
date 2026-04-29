@@ -8,6 +8,9 @@ With this app you can register NFC cards in settings and add additional values t
 
 ## Changelog:
 
+V2.0.0
+* Migrated to Homey Apps SDK v3 with support for Homey Pro (Early 2023). Existing flows and saved cards continue to work.
+
 V1.0.2
 * Bundle Vue 3.2.31
 

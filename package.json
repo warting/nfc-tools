@@ -1,0 +1,14 @@
+{
+  "name": "se.warting.nfctools",
+  "version": "2.0.0",
+  "main": "app.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "homey": "^3.0.0"
+  },
+  "devDependencies": {
+    "homey-apps-sdk-v3-types": "^0.3.0"
+  }
+}

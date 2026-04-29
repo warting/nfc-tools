@@ -1,23 +1,22 @@
 {
   "id": "se.warting.nfctools",
-  "permissions": [
-    "homey:wireless:nfc"
-  ],
-  "sdk": 2,
-  "brandColor": "#FF0000",
+  "sdk": 3,
+  "version": "2.0.0",
+  "compatibility": ">=5.0.0",
+  "platforms": ["local"],
   "name": {
     "en": "NFC tools"
   },
   "description": {
     "en": "NFC tools"
   },
+  "category": ["tools"],
+  "permissions": ["homey:wireless:nfc"],
+  "brandColor": "#FF0000",
   "images": {
-    "large": "/assets/images/large.png",
-    "small": "/assets/images/small.png"
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png"
   },
-  "category": "tools",
-  "version": "1.0.2",
-  "compatibility": ">=1.5.0",
   "author": {
     "name": "Stefan Wärting",
     "email": "stefan@warting.se"
@@ -43,6 +42,12 @@
   },
   "bugs": {
     "url": "https://github.com/warting/nfc-tools/issues"
+  },
+  "api": {
+    "play": {
+      "method": "POST",
+      "path": "/play"
+    }
   },
   "flow": {
     "triggers": [
@@ -82,7 +87,7 @@
             "title": {
               "en": "Count"
             },
-            "example": "123"
+            "example": 123
           }
         ]
       }
